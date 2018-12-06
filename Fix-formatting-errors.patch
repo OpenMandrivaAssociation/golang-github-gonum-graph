@@ -1,0 +1,139 @@
+From 541e86dc9a6dbd4d61201f88af8829fe4631edc8 Mon Sep 17 00:00:00 2001
+From: Jan Chaloupka <jchaloup@redhat.com>
+Date: Mon, 11 Jun 2018 12:25:06 +0200
+Subject: [PATCH] Fix formatting errors
+
+---
+ internal/set_test.go            | 14 +++++++-------
+ path/a_star_test.go             |  6 +++---
+ path/bellman_ford_moore_test.go |  2 +-
+ path/dijkstra_test.go           |  2 +-
+ 4 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/internal/set_test.go b/internal/set_test.go
+index fb39620..15a1c50 100644
+--- a/internal/set_test.go
++++ b/internal/set_test.go
+@@ -85,7 +85,7 @@ func TestAdd(t *testing.T) {
+ 
+ 	for e, n := range s {
+ 		if e != n.ID() {
+-			t.Error("Element ID did not match key: %d != %d", e, n.ID())
++			t.Errorf("Element ID did not match key: %d != %d", e, n.ID())
+ 		}
+ 	}
+ }
+@@ -229,7 +229,7 @@ func TestUnionSame(t *testing.T) {
+ 	for i, s := range []Set{s1, s2, s3} {
+ 		for e, n := range s {
+ 			if e != n.ID() {
+-				t.Error("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
++				t.Errorf("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
+ 			}
+ 		}
+ 	}
+@@ -266,7 +266,7 @@ func TestUnionDiff(t *testing.T) {
+ 	for i, s := range []Set{s1, s2, s3} {
+ 		for e, n := range s {
+ 			if e != n.ID() {
+-				t.Error("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
++				t.Errorf("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
+ 			}
+ 		}
+ 	}
+@@ -304,7 +304,7 @@ func TestUnionOverlapping(t *testing.T) {
+ 	for i, s := range []Set{s1, s2, s3} {
+ 		for e, n := range s {
+ 			if e != n.ID() {
+-				t.Error("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
++				t.Errorf("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
+ 			}
+ 		}
+ 	}
+@@ -334,7 +334,7 @@ func TestIntersectSame(t *testing.T) {
+ 	for i, s := range []Set{s1, s2, s3} {
+ 		for e, n := range s {
+ 			if e != n.ID() {
+-				t.Error("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
++				t.Errorf("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
+ 			}
+ 		}
+ 	}
+@@ -368,7 +368,7 @@ func TestIntersectDiff(t *testing.T) {
+ 	for i, s := range []Set{s1, s2, s3} {
+ 		for e, n := range s {
+ 			if e != n.ID() {
+-				t.Error("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
++				t.Errorf("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
+ 			}
+ 		}
+ 	}
+@@ -406,7 +406,7 @@ func TestIntersectOverlapping(t *testing.T) {
+ 	for i, s := range []Set{s1, s2, s3} {
+ 		for e, n := range s {
+ 			if e != n.ID() {
+-				t.Error("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
++				t.Errorf("Element ID did not match key in s%d: %d != %d", i+1, e, n.ID())
+ 			}
+ 		}
+ 	}
+diff --git a/path/a_star_test.go b/path/a_star_test.go
+index f7ed7e1..e0e0eb9 100644
+--- a/path/a_star_test.go
++++ b/path/a_star_test.go
+@@ -132,7 +132,7 @@ func TestAStar(t *testing.T) {
+ 		p, cost := pt.To(concrete.Node(test.t))
+ 
+ 		if !topo.IsPathIn(test.g, p) {
+-			t.Error("got path that is not path in input graph for %q", test.name)
++			t.Errorf("got path that is not path in input graph for %q", test.name)
+ 		}
+ 
+ 		bfp, ok := path.BellmanFordFrom(concrete.Node(test.s), test.g)
+@@ -199,7 +199,7 @@ func TestExhaustiveAStar(t *testing.T) {
+ 			gotPath, gotWeight := pt.To(goal)
+ 			wantPath, wantWeight, _ := ps.Between(start, goal)
+ 			if gotWeight != wantWeight {
+-				t.Errorf("unexpected path weight from %v to %v result: got:%s want:%s",
++				t.Errorf("unexpected path weight from %v to %v result: got:%v want:%v",
+ 					start, goal, gotWeight, wantWeight)
+ 			}
+ 			if !reflect.DeepEqual(gotPath, wantPath) {
+@@ -272,7 +272,7 @@ func TestAStarNullHeuristic(t *testing.T) {
+ 		}
+ 
+ 		if pt.From().ID() != test.query.From().ID() {
+-			t.Fatalf("%q: unexpected from node ID: got:%d want:%d", pt.From().ID(), test.query.From().ID())
++			t.Fatalf("%q: unexpected from node ID: got:%d want:%d", test.name, pt.From().ID(), test.query.From().ID())
+ 		}
+ 
+ 		p, weight := pt.To(test.query.To())
+diff --git a/path/bellman_ford_moore_test.go b/path/bellman_ford_moore_test.go
+index 5d5934c..836208d 100644
+--- a/path/bellman_ford_moore_test.go
++++ b/path/bellman_ford_moore_test.go
+@@ -32,7 +32,7 @@ func TestBellmanFordFrom(t *testing.T) {
+ 		}
+ 
+ 		if pt.From().ID() != test.query.From().ID() {
+-			t.Fatalf("%q: unexpected from node ID: got:%d want:%d", pt.From().ID(), test.query.From().ID())
++			t.Fatalf("%q: unexpected from node ID: got:%d want:%d", test.name, pt.From().ID(), test.query.From().ID())
+ 		}
+ 
+ 		p, weight := pt.To(test.query.To())
+diff --git a/path/dijkstra_test.go b/path/dijkstra_test.go
+index c22d28f..2afed51 100644
+--- a/path/dijkstra_test.go
++++ b/path/dijkstra_test.go
+@@ -44,7 +44,7 @@ func TestDijkstraFrom(t *testing.T) {
+ 		}
+ 
+ 		if pt.From().ID() != test.query.From().ID() {
+-			t.Fatalf("%q: unexpected from node ID: got:%d want:%d", pt.From().ID(), test.query.From().ID())
++			t.Fatalf("%q: unexpected from node ID: got:%d want:%d", test.name, pt.From().ID(), test.query.From().ID())
+ 		}
+ 
+ 		p, weight := pt.To(test.query.To())
+-- 
+2.7.5
+
